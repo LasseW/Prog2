@@ -31,7 +31,11 @@ public interface MazeGenerator {
      * The GOALCHAR.
      */
     char GOALCHAR = 'Z';
-
+    /**
+     * The DEALER
+     */
+    char DEALERCHAR = 'H';
+    
     /**
      * Generate char [ ] [ ].
      *

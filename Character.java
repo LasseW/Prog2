@@ -190,4 +190,99 @@ public class Character {
             return -1;
         }
     }
+    
+    /**
+     * Add monsters inventar all
+     *
+     *
+     */
+    public void addCharacterInventar(Character character) {
+        Inventar inventarCharacter = character.getInventar();
+        while (!inventarCharacter.isEmpty()) {
+            this.inventar.insert(inventarCharacter.firstItem());
+            inventarCharacter = inventarCharacter.delete();
+        }
+    }
+    
+    /**
+     * loose gold
+     */
+    public boolean looseGold(int lost) {
+    	if(!(this.gold < lost)) {
+    	 this.gold = this.gold - lost;
+    	 return true;
+    	} else {
+    		System.out.println("doofi");
+    		return false;
+    	}
+    }
+    
+    /**
+     * win gold
+     */
+    public void winGold(int win) {
+    	this.gold = this.gold + win;
+    }
+    /**
+	 * Sell one Inventar to a character
+	 */
+    public boolean sellInventar(Character character, String itemName , int itemValue, int itemWeight) {
+    	
+			Item item = new Item(itemName, itemValue, itemWeight);
+
+			/*find choosen item*/
+		    Inventar inventarCharacter = this.getInventar();
+		    /*is item in inventarCharacter*/
+		    if(inventarCharacter.isInList(item)) {
+			    	
+			    
+			    Inventar merk = inventarCharacter.find(item);
+			    Item founded = merk.firstItem();
+			    
+			    /*delete item from seller*/
+			    inventarCharacter = inventarCharacter.delete(item);
+			    this.inventar = inventarCharacter;
+			   
+			    /* insert item to Buyer */ 
+				character.inventar = character.inventar.insert(founded);
+				
+				/* character wins gold but less than itemvalue */
+		        this.winGold((int)(itemValue*Math.random())); 
+		        
+		        return true;
+		    } else {
+		    	return false;
+		    }
+    }
+    
+    
+	/**
+	 * Buy one Inventar from a character
+	 */
+    public boolean buyInventar(Character character, String itemName , int itemValue, int itemWeight) {
+    	
+    	if( this.looseGold(itemValue) == true ) {
+			Item item = new Item(itemName, itemValue, itemWeight);
+			
+			/*find choosen item*/
+		    Inventar inventarCharacter = character.getInventar();
+		    Inventar merk = inventarCharacter.find(item);
+		    Item founded = merk.firstItem();
+		    
+		    /*delete Item from Character*/
+		    inventarCharacter = inventarCharacter.delete(item);
+		    character.inventar = inventarCharacter;
+		   
+		    /* insert item to Buyer and loose gold*/ 
+			this.inventar = this.inventar.insert(founded);
+			
+			/* character wins gold */
+	        character.winGold(itemValue);
+	        
+	        return true;
+	        
+    	} else {
+    		return false;
+    	}
+    }
 }

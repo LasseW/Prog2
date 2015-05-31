@@ -122,12 +122,19 @@ public class RecursiveBacktracker implements MazeGenerator {
      * @param maze the maze
      */
     private void placeSpecialFields(char[][] maze) {
+    	int nrDealer = 0;
         for (int i = 0; i < maze.length; ++i) {
             for (int j = 0; j < maze[0].length; ++j) {
                 if (maze[i][j] == FREECHAR) {
                     int neighbors = countVisitableNeighbors(maze, j, i);
-                    if (neighbors >= 3) {
-                        maze[i][j] = BATTLECHAR;
+                    if (neighbors >= 3 ) {
+                    	//mindestens zwei Haendler
+                    	if(nrDealer < 2) {
+                    		maze[i][j] = DEALERCHAR;
+                    		nrDealer++;
+                    	} else {
+                    		maze[i][j] = BATTLECHAR;
+                    	}
                     } else if (neighbors == 1) {
                         if (r.nextDouble() > 0.5) {
                             maze[i][j] = WELLCHAR;

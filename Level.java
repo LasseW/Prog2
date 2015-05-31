@@ -33,6 +33,10 @@ public class Level {
      */
     public static final char BATTLE = 'B';
     /**
+     * The constant Dealer
+     */
+    public static final char DEALER = 'H';
+    /**
      * The constant GOAL.
      */
     public static final char GOAL = 'Z';
@@ -160,7 +164,7 @@ public class Level {
                 && (x < mapData[0].length)
                 && (mapData[y][x] == PLAIN || mapData[y][x] == FOUNTAIN
                         || mapData[y][x] == SMITHY || mapData[y][x] == BATTLE
-                        || mapData[y][x] == GOAL || mapData[y][x] == START);
+                        || mapData[y][x] == GOAL || mapData[y][x] == START || mapData[y][x] == DEALER);
     }
 
     /**
@@ -236,7 +240,7 @@ public class Level {
     }
 
     /**
-     * Show prompt. //Hier noch Anzeigen des Inventars!
+     * Show prompt. 
      */
     public void showPrompt() {
         System.out.println("------------------------------");
@@ -254,10 +258,8 @@ public class Level {
         }
         System.out.println("i -> Inventar anzeigen");
         System.out.println("------------------------------");
-        System.out.print("Richtung oder Inventar? "); /*
-                                                       * zusaetzliche Anzeige
-                                                       * des Inventars
-                                                       */
+        System.out.print("Richtung oder Inventar? ");
+        
     }
 
     /**
@@ -280,7 +282,7 @@ public class Level {
     }
 
     /**
-     * Handle current field event.
+     * Handle current field event. //TODO!!!!!!!
      *
      * @param p the player
      */
@@ -290,19 +292,22 @@ public class Level {
             case Level.SMITHY:
                 p.setAtk(p.getAtk() + ATKBONUS);
                 System.out
-                        .printf("Die ATK des Spielers wurde um %d erhöht.%n",
+                        .printf("Die ATK des Spielers wurde um %d erhoeht.%n",
                                 ATKBONUS);
                 break;
             case Level.FOUNTAIN:
                 p.setHp(p.getMaxHp());
-                System.out.println("Spieler wurde vollständig geheilt!");
+                System.out.println("Spieler wurde vollstaendig geheilt!");
                 break;
             case Level.BATTLE:
                 startBattle(p);
                 break;
+            case Level.DEALER:
+            	startDeal(p);
+            	break;
             case Level.GOAL:
                 System.out
-                        .println("Herzlichen Glückwunsch! Sie haben gewonnen!");
+                        .println("Herzlichen Glueckwunsch! Sie haben gewonnen!");
                 System.exit(0);
                 break;
         }
@@ -323,7 +328,100 @@ public class Level {
         int selectedMonster = (int) Math.floor(bucket);
         return monsterFarm[selectedMonster];
     }
-
+    
+    /**
+     * Start deal.
+     * 
+     * @param the player
+     */
+    
+    public void startDeal(Player p) {
+    	Character h = new Dealer();
+    	
+    	boolean quit = false;
+    	Scanner sc = new Scanner(System.in);
+    	
+    	while(quit == false) {
+    		
+    		System.out.println( "Moechtest du Items kaufen oder verkaufen. Waehle aus:");
+        	System.out.println("1 -> kaufen");
+        	System.out.println("2 -> verkaufen");
+        	System.out.println("3 -> Haendler verlassen");
+        	String aktion = sc.nextLine();
+        	
+        	switch (aktion) {
+        	//TODO maybe: show gold
+        	case "1":
+        		//show dealers inventar
+        		Inventar inventarH = new Inventar();
+        		inventarH = h.getInventar();
+        		System.out.print(inventarH);
+        		
+        		//ask again
+        		System.out.println("Willst du ein Inventar kaufen?");
+        		System.out.println("1 -> ja");
+        		System.out.println("2 -> nein");
+        		String weiter = sc.nextLine();
+        		
+        		switch(weiter){
+        		case "1":
+    	    		//choose inventar to sell
+    	    		System.out.println("Welches Inventar willst du kaufen ?");
+    	    		System.out.println("Name:");
+    	    		String name = sc.next();
+    	    		System.out.println("Wert");
+    	    		int value = sc.nextInt();
+    	    		System.out.println("Gewicht");
+    	    		int weight = sc.nextInt();
+    	    		
+    	    		//buy inventar
+    	    		if(p.buyInventar(h, name, value, weight)) {
+    	    			System.out.println("Der Kauf war erfolgreich.");
+    	    			continue;	
+    	    		} else {
+    	    			System.out.println("Der Kauf war nicht erfolgreich. Du hast zu wenige Geld oder das Inventar wurde nicht korrekt eingegeben.");
+    	    			continue;
+    	    		}
+        		case "2": 
+        			continue;
+        		default:
+                    System.out.println("Fehlerhafte Aktion!");
+                    continue;
+        		}	  		
+        	case "2":	
+        		//show players inventar 
+        		Inventar inventarP = new Inventar();
+        		inventarP = p.getInventar();
+        		System.out.print(inventarP);
+        		
+        		//choose inventar to sell
+        		System.out.println("Welches Inventar willst du verkaufen ?");
+        		System.out.println("Name:");
+        		String name = sc.next();
+        		System.out.println("Wert");
+        		int value = sc.nextInt();
+        		System.out.println("Gewicht");
+        		int weight = sc.nextInt();
+        			
+        		//sell inventar
+        		if(p.sellInventar(h, name, value, weight)) {
+        			System.out.println("Der Verkauf war erfolgreich.");
+        			continue;
+        		} else {
+        			System.out.println("Der Verkauf war nicht erfolgreich. Das Inventar wurde nicht korrekt eingegeben.");
+        			continue;
+        		}
+        	case "3":
+        		quit = true;
+        		break;
+        	default:
+                System.out.println("Fehlerhafte Aktion!");
+                continue;
+        	}
+    		
+    	}
+		
+    }
     /**
      * Start battle.
      *
@@ -341,7 +439,7 @@ public class Level {
         while (true) {
             System.out
                     .println("------------------------------------------------");
-            System.out.println("Mögliche Aktionen:");
+            System.out.println("Moegliche Aktionen:");
             System.out.println("1 -> Angriff");
             System.out.printf("2 -> Item (%d verbleibend)%n",
                     p.getRemainingItemUses());
@@ -417,7 +515,7 @@ public class Level {
             } else if (m.isDefeated()) {
                 System.out
                         .println("Spieler gewinnt und erhaelt das Inventar des Monsters!");
-                p.addMonsterInventar(m); // TODO
+                p.addCharacterInventar(m); // TODO
                 break;
             }
 

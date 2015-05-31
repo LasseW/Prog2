@@ -33,9 +33,9 @@ public class Item implements Comparable {
      * @param weight Gewicht
      */
     public Item(String name, int value, int weight) {
-        this.name = name;
-        this.weight = weight;
+        this.name = name;     
         this.value = value;
+        this.weight = weight;
     }
 
     /**

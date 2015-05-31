@@ -138,7 +138,7 @@ public class Inventar implements List {
      * @param x das Item
      * @return x das Item
      */
-    private Inventar find(Item x) {
+    public Inventar find(Item x) {
         if (isEmpty())
             return null;
         else if (next.item.equals(x))
@@ -181,7 +181,7 @@ public class Inventar implements List {
         String result = "";
         int j = 1;
         while (!merk.isEmpty()) {
-        	/* leeres Item nicht wird nicht gespeichert */
+        	/* leeres Item nicht wird nicht angezeigt */
     		if(merk.item != null) {
 	            result += "(" + j + ")" + merk.item + "\n";   
 	            j++;

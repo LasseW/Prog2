@@ -59,7 +59,7 @@ public class Player extends Character {
      */
     public Player(int maxHp, int atk, int healingPower, int remainingItemUses,
             double hitChance) {
-        this(maxHp, atk, healingPower, remainingItemUses, hitChance, 70, 10, 0,
+        this(maxHp, atk, healingPower, remainingItemUses, hitChance, 70, 10, 50,
                 new Inventar());
     }
 
@@ -85,19 +85,7 @@ public class Player extends Character {
         this.apRegen = apRegen;
     }
 
-    /**
-     * Add monsters inventar TODO
-     *
-     *
-     */
-    public void addMonsterInventar(Character monster) {
-        Inventar inventarMonster = monster.getInventar();
-        while (!inventarMonster.isEmpty()) {
-            this.inventar.insert(inventarMonster.firstItem());
-            inventarMonster = inventarMonster.delete();
-        }
-    }
-
+    
     // super inventar.insert(inventar.item);
 
     /**
