@@ -45,7 +45,7 @@ public class Monster extends Character {
      * @param hitChance the hit chance
      */
     public Monster(String name, int hp, int atk, double hitChance) {
-        super(hp, atk, hitChance, 50, new Inventar());
+        super(hp, atk, hitChance, 50, new Inventar(), new Inventar());
         this.name = name;
         int anzahl = ((int) (Math.random() * 10) + 1);
 

@@ -18,7 +18,7 @@ public class Dealer extends Character {
 	 * The Dealer.
 	 */
 	public Dealer() {
-		super(0, 0, 0.0, 50, new Inventar());
+		super(0, 0, 0.0, 50, new Inventar(), new Inventar());
 		this.name = "Haendler";
 		
 		/* Nr of Inventar to sell*/

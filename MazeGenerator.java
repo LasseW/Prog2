@@ -35,6 +35,10 @@ public interface MazeGenerator {
      * The DEALER
      */
     char DEALERCHAR = 'H';
+    /**
+     * The QUEST
+     */
+    char QUESTCHAR = 'Q';
     
     /**
      * Generate char [ ] [ ].

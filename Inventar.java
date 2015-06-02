@@ -6,18 +6,64 @@
  * @version 13.05.2015
  */
 
-public class Inventar implements List {
+public class Inventar<T> implements List<T> {
 
     /* Datenfeld */
-    private Item item;
+    private T item;
+    
     /* Zeigerfeld */
-    public Inventar next;
+    public Inventar<T> next;
 
     /* Konstruktor erzeugt leere Liste */
     public Inventar() {
         item = null;
         next = null;
     }
+    
+    /**********************************************************************************************************************/
+    /* ueberprueft wie oft der NAME eines Items im Inventar vorhanden ist und loescht alle vorkommenden Items mit diesem NAMEN*/
+     
+    /*public Inventar<T> find(String name) {
+        if (isEmpty())
+            return null;
+        else if (next.item.equalsName(name))
+            return this;
+        else
+            return next.find(name);
+    }
+
+    /**
+     * Loescht das erste vorkommen des Items x
+     *
+     * @param x das Item
+     * @return die geanderte Liste
+     *
+    public Inventar<T> delete(String name) {
+        Inventar<T> l = find(name);
+        if (l != null)
+            l.next = l.next.next;
+        return this;
+    }*/
+    
+    /*public Inventar<T> delete(T x) {
+        Inventar<T> l = find(x);
+        if (l != null)
+            l.next = l.next.next;
+        return this;
+    }*/
+    
+    /*public Inventar<T> delete(T x)*/
+	public int quantity(String name) {
+		int nr = 0;
+		while(this.delete(name) != null){
+			/* aktuelles, neues Inventar ohne Quest x */
+			this.delete(name);
+			++nr;
+		}
+		return nr;  		
+	}
+    /**********************************************************************************************************************/
+    
 
     /**
      * Ueberprueft ob die Liste leer ist
@@ -46,7 +92,7 @@ public class Inventar implements List {
      * @param x das Item
      * @return true, x ist in der Liste enthalten
      */
-    public boolean isInList(Item x) {
+    public boolean isInList(T x) {
         if (isEmpty()) {
             return false;
         } else {
@@ -64,7 +110,7 @@ public class Inventar implements List {
      * @return das erste Item
      * @throws IllegalStateException wenn die Liste leer ist
      */
-    public Item firstItem() {
+    public T firstItem() {
         if (isEmpty())
             throw new IllegalStateException();
         else
@@ -79,11 +125,11 @@ public class Inventar implements List {
      * @throws IndexOutOfBoundsException wenn i < 0 oder i >= length()
      */
 
-    public Item getItem(int i) throws IndexOutOfBoundsException {
+    public T getItem(int i) throws IndexOutOfBoundsException {
         if (i < 0 || i >= next.length())
             throw new IndexOutOfBoundsException();
 
-        Inventar merk = this;
+        Inventar<T> merk = this;
         while (!merk.isEmpty()) {
             merk = merk.next;
         }
@@ -96,12 +142,12 @@ public class Inventar implements List {
      * @param x das Item
      * @return die geanderte Liste
      */
-    public Inventar insert(Item x) {
-        Inventar newElement = new Inventar();
+    public Inventar<T> insert(T x) {
+        Inventar<T> newElement = new Inventar();
         if (!this.isEmpty()) {
             /* solange x groesser ist als das aktuelle Item */
             /* achte darauf dass nicht null */
-            if (next.item.compareTo(x) < 0) {
+            if (next.item.compareTo(x) < 0) { //TODO???
                 /* rekursiver Aufruf */
                 return this.next.insert(x);
 
@@ -125,7 +171,7 @@ public class Inventar implements List {
      * @param x das Item
      * @return die geanderte Liste
      */
-    public Inventar append(Item x) {
+    public Inventar<T> append(T x) {
         if (isEmpty())
             return insert(x);
         else
@@ -138,7 +184,7 @@ public class Inventar implements List {
      * @param x das Item
      * @return x das Item
      */
-    public Inventar find(Item x) {
+    public Inventar<T> find(Object x) {
         if (isEmpty())
             return null;
         else if (next.item.equals(x))
@@ -153,8 +199,8 @@ public class Inventar implements List {
      * @param x das Item
      * @return die geanderte Liste
      */
-    public Inventar delete(Item x) {
-        Inventar l = find(x);
+    public Inventar<T> delete(Object x) {
+        Inventar<T> l = find(x);
         if (l != null)
             l.next = l.next.next;
         return this;
@@ -165,7 +211,7 @@ public class Inventar implements List {
      *
      * @return die geanderte Liste
      */
-    public Inventar delete() {
+    public Inventar<T> delete() {
         if (!isEmpty())
             next = next.next;
         return this;
@@ -177,7 +223,7 @@ public class Inventar implements List {
      * @return the string
      */
     public String toString() {
-        Inventar merk = this;
+        Inventar<T> merk = this;
         String result = "";
         int j = 1;
         while (!merk.isEmpty()) {

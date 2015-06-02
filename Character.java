@@ -10,7 +10,11 @@ public class Character {
     /*
      * The Inventar
      */
-    protected Inventar inventar;
+    protected Inventar<Item> inventar;
+    /*
+     * The Questlog
+     */
+    private Inventar<Quest> questlog;
     /**
      * The Max hp.
      */
@@ -47,13 +51,14 @@ public class Character {
      * @param inventar the inventar
      */
     public Character(int maxHp, int atk, double hitChance, int gold,
-            Inventar inventar) {
+            Inventar<Item> inventar, Inventar<Quest> questlog) {
         this.maxHp = maxHp;
         this.hp = maxHp;
         this.atk = atk;
         this.hitChance = hitChance;
         this.gold = gold;
         this.inventar = inventar;
+        this.questlog = questlog;
     }
 
     /**
@@ -70,8 +75,17 @@ public class Character {
      *
      * @return inventar
      */
-    public Inventar getInventar() {
+    public Inventar<Item> getInventar() {
         return inventar;
+    }
+    
+    /**
+     * Gets inventar
+     *
+     * @return inventar
+     */
+    public Inventar<Quest> getQuestlog(){
+    	return questlog;
     }
 
     /**
@@ -197,7 +211,7 @@ public class Character {
      *
      */
     public void addCharacterInventar(Character character) {
-        Inventar inventarCharacter = character.getInventar();
+        Inventar<Item> inventarCharacter = character.getInventar();
         while (!inventarCharacter.isEmpty()) {
             this.inventar.insert(inventarCharacter.firstItem());
             inventarCharacter = inventarCharacter.delete();
@@ -231,12 +245,12 @@ public class Character {
 			Item item = new Item(itemName, itemValue, itemWeight);
 
 			/*find choosen item*/
-		    Inventar inventarCharacter = this.getInventar();
+		    Inventar<Item> inventarCharacter = this.getInventar();
 		    /*is item in inventarCharacter*/
 		    if(inventarCharacter.isInList(item)) {
 			    	
 			    
-			    Inventar merk = inventarCharacter.find(item);
+			    Inventar<Item> merk = inventarCharacter.find(item);
 			    Item founded = merk.firstItem();
 			    
 			    /*delete item from seller*/
@@ -265,8 +279,8 @@ public class Character {
 			Item item = new Item(itemName, itemValue, itemWeight);
 			
 			/*find choosen item*/
-		    Inventar inventarCharacter = character.getInventar();
-		    Inventar merk = inventarCharacter.find(item);
+		    Inventar<Item> inventarCharacter = character.getInventar();
+		    Inventar<Item> merk = inventarCharacter.find(item);
 		    Item founded = merk.firstItem();
 		    
 		    /*delete Item from Character*/

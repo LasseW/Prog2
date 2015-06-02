@@ -37,6 +37,10 @@ public class Level {
      */
     public static final char DEALER = 'H';
     /**
+     * The constand Quest
+     */
+    public static final char QUEST = 'Q';
+    /**
      * The constant GOAL.
      */
     public static final char GOAL = 'Z';
@@ -164,7 +168,7 @@ public class Level {
                 && (x < mapData[0].length)
                 && (mapData[y][x] == PLAIN || mapData[y][x] == FOUNTAIN
                         || mapData[y][x] == SMITHY || mapData[y][x] == BATTLE
-                        || mapData[y][x] == GOAL || mapData[y][x] == START || mapData[y][x] == DEALER);
+                        || mapData[y][x] == GOAL || mapData[y][x] == START || mapData[y][x] == DEALER || mapData[y][x] == QUEST);
     }
 
     /**
@@ -305,6 +309,9 @@ public class Level {
             case Level.DEALER:
             	startDeal(p);
             	break;
+            case Level.QUEST:
+            	startQuest(p); //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            	break;
             case Level.GOAL:
                 System.out
                         .println("Herzlichen Glueckwunsch! Sie haben gewonnen!");
@@ -329,6 +336,89 @@ public class Level {
         return monsterFarm[selectedMonster];
     }
     
+    
+    /**
+     * Start quest.
+     */
+    
+    public void startQuest(Player p) { //TODO
+    	Character h =  new Dealer();
+    	
+    	boolean quit = false;
+    	Scanner sc = new Scanner(System.in);
+    	while(quit == false) {
+
+	    	System.out.println("Ich bin der Questgeber. Waehle aus: ");
+	    	System.out.println("1 -> neue Quest erhalten");
+	    	System.out.println("2 -> Quest abschließen");
+	    	System.out.println("3 -> Questgeber verlassen");
+	    	
+	    	String aktion = sc.nextLine();
+	    	switch(aktion) {	    	
+	    	case "1":
+	    		//pruefe ob aktuelle Quest des Spielers geloest wurde
+	    		
+	    		//nimm nächstes Quest aus dem Stapel
+    			Inventar<Quest> questlog = q.getQuestlog();
+    			Quest newQuest = questlog.firstItem();	
+    			
+    			//suche nach dem prequest davon im PLAYER...usw
+    			String prequestName = newQuest.getPrequest();
+    			Inventar<Quest> prequestRest = questlog.find(prequestName);
+    			Quest prequest = prequestRest.firstItem();
+    			
+	    		if(prequest.isQuestDone()){
+	    			
+	    			//fuege dem Player naechstes Quest hinzu
+	    			
+	    		
+	    		//whaele naechstes quest aus
+	    		
+	    		//uebertrage quest auf player
+	    		continue;
+	    		} else {
+	    			System.out.println("Die aktuelle Quest ist noch nicht abgeschlossen.");
+	    			continue;
+	    		}
+	    		
+	    	case "2":	    		    		
+	    		System.out.println("Welche Quest moechtest du abschliessen? Name der Quest: ");
+	    		String eingabe = sc.nextLine();
+	    		
+	    		//suche nach dem Quest mit dem eingegebenen Namen im Questlog des Spielers
+	    		Inventar<Quest> questlog = p.getQuestlog(); 
+    			Inventar<Quest> questlogRest = questlog.find(eingabe);
+    			Quest quest = questlogRest.firstItem();	
+    			
+    			//suche nach dem prequest
+    			String prequestName = quest.getPrequest();
+    			Inventar<Quest> prequestRest = questlog.find(prequestName);
+    			Quest prequest = prequestRest.firstItem();
+	    		
+	    		//pruefe ob Vorquest abgeschlossen wurde
+	    		if(prequest.isQuestDone()) {	
+	    			//pruefe ob der notwendige Questgegenstand  enstprechend oft vorhanden ist
+	    			int quantity = quest.getQuantity();
+	    			Inventar<Quest> inventar = p.getQuestlog();	    			
+	    			if(inventar.quantity(quest.getItemName()) == quantity){
+	    				//markiere Quest als abgeschlossen
+	    				quest.questDone();
+	    			} else {
+		    				System.out.println("Die Quest wurde nicht vollständig abgeschlossen.");
+			    			continue;
+    				}	
+	    		} else {
+	    			System.out.println("Die Prequest wurde nicht abgeschlossen.");
+	    			continue;
+	    		}
+	    		continue;
+	    	case "3":
+	    		quit = true;
+	    		break;
+	    	
+	    	}
+    	} 	
+    }
     /**
      * Start deal.
      * 
@@ -343,7 +433,7 @@ public class Level {
     	
     	while(quit == false) {
     		
-    		System.out.println( "Moechtest du Items kaufen oder verkaufen. Waehle aus:");
+    		System.out.println( "Moechtest du Items kaufen oder verkaufen. Waehle aus: ");
         	System.out.println("1 -> kaufen");
         	System.out.println("2 -> verkaufen");
         	System.out.println("3 -> Haendler verlassen");
