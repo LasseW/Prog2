@@ -1,4 +1,6 @@
+import java.io.*;
 import java.util.Scanner;
+
 
 /**
  * The type Level.
@@ -340,11 +342,14 @@ public class Level {
     
     /**
      * Start quest.
+     * @
      */
     
-    public void startQuest(Player p) { 
+    public void startQuest(Player p) throws IOException { 
     	//Questgeber
     	Character q =  new Dealer();
+    	Inventar<Quest> quest = q.getQuestlog();
+    	quest.readFile("src/quest.csv", q);
     	//Questgeber wird befuellt
     	
     	boolean quit = false;
@@ -407,22 +412,22 @@ public class Level {
 		    		System.out.println("2");
 	    			Inventar<Quest> questlogPlayerRest = questlogPlayer.find(eingabe);
 	    			System.out.println("3");
-	    			Quest quest = questlogPlayerRest.firstItem();	
+	    			Quest quest1 = questlogPlayerRest.firstItem();	
 	    			System.out.println("4");
 	    			
 	    			//suche nach dem prequest
-	    			String prequestPlayerName = quest.getPrequest();
+	    			String prequestPlayerName = quest1.getPrequest();
 	    			Inventar<Quest> prequestPlayerRest = questlogPlayer.find(prequestPlayerName);
 	    			Quest prequestPlayer = prequestPlayerRest.firstItem();
 		    		
 		    		//pruefe ob Vorquest abgeschlossen wurde
 		    		if(prequestPlayer.isQuestDone()) {	
 		    			//pruefe ob der notwendige Questgegenstand  enstprechend oft vorhanden ist
-		    			int quantity = quest.getQuantity();
-		    			Inventar<Quest> inventar = p.getQuestlog();	    			
-		    			if(inventar.quantity(quest.getItemName()) == quantity){
+		    			int quantity = quest1.getQuantity();
+		    			Inventar<Item> inventar = p.getInventar();	  //???  			
+		    			if(inventar.quantity(quest1.getItemName()) >= quantity){
 		    				//markiere Quest als abgeschlossen
-		    				quest.questDone();
+		    				quest1.questDone();
 		    			} else {
 			    				System.out.println("Die Quest wurde nicht vollständig abgeschlossen.");
 				    			continue;

@@ -225,23 +225,24 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
      * @param file
      * @throws IOException
      */
-    public void ReadFile(String file) throws IOException { //IOException ??
+    public void readFile(String file, Character c) throws IOException { //IOException ??
     	
     	FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);
         
         String zeile = "";
-        Inventar<T> quests = new Inventar<T>();
 
         while( (zeile = br.readLine()) != null )
         {
         	String[] t = zeile.split(",");
         	if(t.length == 3) {
         		Item ding = new Item(t[0], Integer.parseInt(t[1]), Integer.parseInt(t[2]));  
-        		quests = this.append( (T) ding); // <--?       	
+        		//this.append((T) ding); //
+        		c.addItem(ding);     	
         	} else if (t.length == 4) {
         		Quest quest = new Quest(t[0], t[1], t[2], Integer.parseInt(t[3]), false);  
-        		this.append( (T) quest); // <--?
+        		//this.append( (T) quest); // <--?
+        		c.addQuest(quest);
         	} else {
         		System.out.println("unbekannter Typ");
         	}

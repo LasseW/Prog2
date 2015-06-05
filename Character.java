@@ -243,6 +243,15 @@ public class Character {
     }
     
     /**
+     *  Add Quest to the character
+     *  
+     * @param quest
+     */
+    public void addItem(Item item) {
+    	this.inventar = this.inventar.insert(item);
+    }
+    
+    /**
      * delete Quest from character
      */
     public void deleteQuest(Quest quest){
