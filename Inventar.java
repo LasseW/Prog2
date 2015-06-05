@@ -30,7 +30,6 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
 		int nr = 0;
 		while(this.delete(name) != null){
 			/* aktuelles, neues Inventar ohne Quest x */
-			this.delete(name);
 			++nr;
 		}
 		return nr;  		
@@ -208,12 +207,14 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
         Inventar<T> merk = this;
         String result = "";
         int j = 1;
-        while (!merk.isEmpty()) {
+        
+        while (!merk.isEmpty()) {        	
         	/* leeres Item nicht wird nicht angezeigt */
-    		if(merk.item != null) {
-	            result += "(" + j + ")" + merk.item + "\n";   
+    		//if(merk.item != null) {
+    			//System.out.println("DOOD");
+	            result += "(" + j + ")" + merk.next.item + "\n";   
 	            j++;
-    		}
+    		//}
     		merk = merk.next;
     		
         }
@@ -230,11 +231,11 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
     	FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);
         
-        String zeile = "";
+        String zeile = br.readLine();
 
         while( (zeile = br.readLine()) != null )
         {
-        	String[] t = zeile.split(",");
+        	String[] t = zeile.split(", ");
         	if(t.length == 3) {
         		Item ding = new Item(t[0], Integer.parseInt(t[1]), Integer.parseInt(t[2]));  
         		//this.append((T) ding); //

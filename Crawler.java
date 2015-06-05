@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -8,8 +9,9 @@ public class Crawler {
      * The entry point of application.
      *
      * @param args the input arguments
+     * @throws IOException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         MazeGenerator mg = new RecursiveBacktracker();
          //Level m = new Level(mg.generate(31, 71));
         Level m = new Level(mg.generate(13, 13));
@@ -30,8 +32,10 @@ public class Crawler {
 	                    Inventar<Item> inventar = p.getInventar();
 	                    System.out.println(inventar);
                 	} else {
+                		
                 		Inventar<Quest> inventar = p.getQuestlog();
 	                    System.out.println(inventar);
+	                   
                 	}
                 } else if (!m.canMove(direction)) {
                     System.out.println("Ungültige Richtung");

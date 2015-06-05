@@ -84,6 +84,7 @@ public class Level {
         for (int y = 0; y < mapData.length; y++) {
             for (int x = 0; x < mapData[0].length; x++) {
                 if (mapData[y][x] == START) {
+                	mapData[y-1][x] = QUEST;
                     playerX = x;
                     playerY = y;
                     return true;
@@ -293,7 +294,7 @@ public class Level {
      *
      * @param p the player
      */
-    public void handleCurrentFieldEvent(Player p) {
+    public void handleCurrentFieldEvent (Player p) throws IOException {
         char field = getField();
         switch (field) {
             case Level.SMITHY:
@@ -423,9 +424,9 @@ public class Level {
 		    		//pruefe ob Vorquest abgeschlossen wurde
 		    		if(prequestPlayer.isQuestDone()) {	
 		    			//pruefe ob der notwendige Questgegenstand  enstprechend oft vorhanden ist
-		    			int quantity = quest1.getQuantity();
+		    			int quantityNr = quest1.getQuantity();
 		    			Inventar<Item> inventar = p.getInventar();	  //???  			
-		    			if(inventar.quantity(quest1.getItemName()) >= quantity){
+		    			if(inventar.quantity(quest1.getItemName()) >= quantityNr){
 		    				//markiere Quest als abgeschlossen
 		    				quest1.questDone();
 		    			} else {
@@ -446,9 +447,11 @@ public class Level {
     	} else {
     		System.out.println("TEST");
     		//Questlog des Questgebers
-			Inventar<Quest> questlog = q.getQuestlog();
+			//Inventar<Quest> questlog = q.getQuestlog();
+			System.out.println(quest);
 			//nimm erstes Quest auf dem Questlog
-			Quest newQuest = questlog.firstItem();	
+			Quest newQuest = quest.firstItem();	
+			System.out.println(newQuest);
 			
 			//fuege dem Inventar des Players - sortiert - ein neues Quest hinzu //sortiert sinvoll ?
 			p.addQuest(newQuest);

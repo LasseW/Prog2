@@ -239,7 +239,7 @@ public class Character {
      * @param quest
      */
     public void addQuest(Quest quest) {
-    	this.questlog = this.questlog.insert(quest);
+    	this.questlog = this.questlog.append(quest);
     }
     
     /**
@@ -248,7 +248,7 @@ public class Character {
      * @param quest
      */
     public void addItem(Item item) {
-    	this.inventar = this.inventar.insert(item);
+    	this.inventar = this.inventar.append(item);
     }
     
     /**

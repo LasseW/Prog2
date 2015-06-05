@@ -42,6 +42,7 @@ public class Quest implements Comparable<Quest> {
 	public Quest(String name, String prequest, String item, int quantity, boolean done) {
 		this.name = name;
 		this.prequest = prequest;
+		this.item = item;
 		this.quantity = quantity;
 		this.done = done;
 	}
