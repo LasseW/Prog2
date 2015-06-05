@@ -5,8 +5,8 @@
  * @author Hülya Poyraz 4057202 Gruppe 11
  * @version 13.05.2015
  */
-
-public class Item implements Comparable<Item> {
+//TODO
+public class Item<V extends Number> implements Comparable<Item> {
 
     /*** Statusattribute ***/
 
@@ -17,11 +17,11 @@ public class Item implements Comparable<Item> {
     /**
      * The weight
      */
-    private int weight;
+    private V weight;
     /**
      * The value
      */
-    private int value;
+    private V value;
 
     /*** Konstruktoren ***/
 
@@ -32,7 +32,7 @@ public class Item implements Comparable<Item> {
      * @param value Verkaufswert
      * @param weight Gewicht
      */
-    public Item(String name, int value, int weight) {
+    public Item(String name, V value, V weight) {
         this.name = name;     
         this.value = value;
         this.weight = weight;

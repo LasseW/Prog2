@@ -467,8 +467,11 @@ public class Level {
      * @param the player
      */
     
-    public void startDeal(Player p) {
+    public void startDeal(Player p) throws IOException {
+    	//TODO
     	Character h = new Dealer();
+    	Inventar<Item> inventar = h.getInventar();
+    	inventar.readFile("src/item.csv", h);
     	
     	boolean quit = false;
     	Scanner sc = new Scanner(System.in);
@@ -559,9 +562,12 @@ public class Level {
      *
      * @param p the p
      */
-    public void startBattle(Player p) {
+    public void startBattle(Player p) throws IOException {
         Character m = randomMonster();
-
+        Inventar<Item> inventar = m.getInventar();
+    	inventar.readFile("src/item.csv", m);
+    	
+       
         Scanner sc = new Scanner(System.in);
 
         System.out.println("                 Kampf Start                    ");
