@@ -60,7 +60,7 @@ public class Player extends Character {
     public Player(int maxHp, int atk, int healingPower, int remainingItemUses,
             double hitChance) {
         this(maxHp, atk, healingPower, remainingItemUses, hitChance, 70, 10, 50,
-                new Inventar(), new Inventar());
+                new Inventar<Item>(), new Inventar<Quest>());
     }
 
     /**
@@ -76,7 +76,7 @@ public class Player extends Character {
      */
     public Player(int maxHp, int atk, int healingPower, int remainingItemUses,
             double hitChance, int maxAp, int apRegen, int gold,
-            Inventar inventar, Inventar questlog) {
+            Inventar<Item> inventar, Inventar<Quest> questlog) {
         super(maxHp, atk, hitChance, gold, inventar, questlog);
         this.healingPower = healingPower;
         this.remainingItemUses = remainingItemUses;
@@ -85,8 +85,6 @@ public class Player extends Character {
         this.apRegen = apRegen;
     }
 
-    
-    // super inventar.insert(inventar.item);
 
     /**
      * Gets remaining item uses.

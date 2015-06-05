@@ -41,6 +41,22 @@ public class Character {
      */
     public static final int ATTACK_SPECIAL = 1;
 
+
+    
+    /**
+     * Standard Character mit Standard Questlog
+     * 
+     * @param maxHP
+     * @param atk
+     * @param hitChance
+     * @param gold
+     * @param inventar
+     */
+    /*public Character(int maxHP, int atk, double hitChance, int gold, Inventar<Item> inventar){  	
+    	this(maxHP, atk, hitChance, gold, new Inventar<Item>(), new Inventar<Quest>());
+    	questlog.insert(new Quest());
+    }*/
+    
     /**
      * Instantiates a new Character.
      *
@@ -217,7 +233,21 @@ public class Character {
             inventarCharacter = inventarCharacter.delete();
         }
     }
+    /**
+     *  Add Quest to the character
+     *  
+     * @param quest
+     */
+    public void addQuest(Quest quest) {
+    	this.questlog = this.questlog.insert(quest);
+    }
     
+    /**
+     * delete Quest from character
+     */
+    public void deleteQuest(Quest quest){
+    	this.questlog = this.questlog.delete(quest);
+    }
     /**
      * loose gold
      */

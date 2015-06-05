@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 /**
  * Diese Klasse stellt ein Inventar fuer den Spieler zur Verfuegung
  * 
@@ -6,7 +10,7 @@
  * @version 13.05.2015
  */
 
-public class Inventar<T> implements List<T> {
+public class Inventar<T extends Comparable<T>> implements List<T> {
 
     /* Datenfeld */
     private T item;
@@ -20,38 +24,7 @@ public class Inventar<T> implements List<T> {
         next = null;
     }
     
-    /**********************************************************************************************************************/
-    /* ueberprueft wie oft der NAME eines Items im Inventar vorhanden ist und loescht alle vorkommenden Items mit diesem NAMEN*/
-     
-    /*public Inventar<T> find(String name) {
-        if (isEmpty())
-            return null;
-        else if (next.item.equalsName(name))
-            return this;
-        else
-            return next.find(name);
-    }
-
-    /**
-     * Loescht das erste vorkommen des Items x
-     *
-     * @param x das Item
-     * @return die geanderte Liste
-     *
-    public Inventar<T> delete(String name) {
-        Inventar<T> l = find(name);
-        if (l != null)
-            l.next = l.next.next;
-        return this;
-    }*/
-    
-    /*public Inventar<T> delete(T x) {
-        Inventar<T> l = find(x);
-        if (l != null)
-            l.next = l.next.next;
-        return this;
-    }*/
-    
+    //TODO!!!!
     /*public Inventar<T> delete(T x)*/
 	public int quantity(String name) {
 		int nr = 0;
@@ -62,9 +35,18 @@ public class Inventar<T> implements List<T> {
 		}
 		return nr;  		
 	}
-    /**********************************************************************************************************************/
-    
-
+	
+/*	
+	public Inventar<T> find(T x) {
+        if (isEmpty())
+            return null;
+        else if (next.item.equals(x))
+            return this;
+        else
+            return next.find(x);
+    }
+*/
+	
     /**
      * Ueberprueft ob die Liste leer ist
      *
@@ -110,9 +92,9 @@ public class Inventar<T> implements List<T> {
      * @return das erste Item
      * @throws IllegalStateException wenn die Liste leer ist
      */
-    public T firstItem() {
+    public T firstItem() throws IllegalStateException {
         if (isEmpty())
-            throw new IllegalStateException();
+            throw new IllegalStateException("Das Item ist leer");
         else
             return next.item;
     }
@@ -143,11 +125,11 @@ public class Inventar<T> implements List<T> {
      * @return die geanderte Liste
      */
     public Inventar<T> insert(T x) {
-        Inventar<T> newElement = new Inventar();
+        Inventar<T> newElement = new Inventar<T>();
         if (!this.isEmpty()) {
             /* solange x groesser ist als das aktuelle Item */
             /* achte darauf dass nicht null */
-            if (next.item.compareTo(x) < 0) { //TODO???
+            if ((next.item).compareTo(x) < 0) { 
                 /* rekursiver Aufruf */
                 return this.next.insert(x);
 
@@ -236,6 +218,38 @@ public class Inventar<T> implements List<T> {
     		
         }
         return result;
+    }
+    /**
+     * reads the file and fills the inventar with this content //TODOOO!!!
+     * 
+     * @param file
+     * @throws IOException
+     */
+    public void ReadFile(String file) throws IOException { //IOException ??
+    	
+    	FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+        
+        String zeile = "";
+        Inventar<T> quests = new Inventar<T>();
+
+        while( (zeile = br.readLine()) != null )
+        {
+        	String[] t = zeile.split(",");
+        	if(t.length == 3) {
+        		Item ding = new Item(t[0], Integer.parseInt(t[1]), Integer.parseInt(t[2]));  
+        		quests = this.append( (T) ding); // <--?       	
+        	} else if (t.length == 4) {
+        		Quest quest = new Quest(t[0], t[1], t[2], Integer.parseInt(t[3]), false);  
+        		this.append( (T) quest); // <--?
+        	} else {
+        		System.out.println("unbekannter Typ");
+        	}
+        	
+        }
+        br.close();
+        //return quests;
+          	
     }
 
 }

@@ -61,7 +61,7 @@ public interface List<T> {
      * @param x das Item
      * @return die geanderte Liste
      */
-    List<T> delete(T x);
+    List<T> delete(Object x);
 
     /**
      * Loescht das erste Element der Liste

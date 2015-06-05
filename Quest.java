@@ -1,3 +1,5 @@
+import java.io.*;
+
 /**
  * 
  */
@@ -8,7 +10,7 @@
  */
 
 
-public class Quest {
+public class Quest implements Comparable<Quest> {
 	/**
 	 * The name
 	 */
@@ -33,6 +35,10 @@ public class Quest {
 	/**
 	 * 
 	 */
+	/*public Quest() {
+		this("name","prequest", "item", 0, true);		
+	}*/
+	
 	public Quest(String name, String prequest, String item, int quantity, boolean done) {
 		this.name = name;
 		this.prequest = prequest;
@@ -97,5 +103,21 @@ public class Quest {
      *
      */
     //public int compareTo(Object o)
+	public int compareTo(Quest ding) {
+        return name.compareTo(ding.name);
+    }
+	
+	/**
+     * To string.
+     *
+     * @return the string
+     */
+    public String toString() {
+        return String.format(
+                "%-15s Name: %-15s Prequest: %-15s Item: %-15s Anzahl: %-15s Erledigt: %-15s",
+                "Die Werte des Quests sind", this.name, this.prequest, this.item, this.quantity, this.done);
+    }
+    
+    
 
 }

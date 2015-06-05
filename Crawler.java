@@ -25,9 +25,14 @@ public class Crawler {
             } else {
                 char direction = input.charAt(0);
                 /* shows inventar */
-                if (direction == 'i') {
-                    Inventar inventar = p.getInventar();
-                    System.out.println(inventar);
+                if (direction == 'i' || direction == 'l') {
+                	if(direction =='i') {
+	                    Inventar<Item> inventar = p.getInventar();
+	                    System.out.println(inventar);
+                	} else {
+                		Inventar<Quest> inventar = p.getQuestlog();
+	                    System.out.println(inventar);
+                	}
                 } else if (!m.canMove(direction)) {
                     System.out.println("Ungültige Richtung");
                 } else {

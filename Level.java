@@ -261,6 +261,7 @@ public class Level {
             System.out.println("w -> Westen");
         }
         System.out.println("i -> Inventar anzeigen");
+        System.out.println("l -> Questlog anzeigen");
         System.out.println("------------------------------");
         System.out.print("Richtung oder Inventar? ");
         
@@ -286,7 +287,7 @@ public class Level {
     }
 
     /**
-     * Handle current field event. //TODO!!!!!!!
+     * Handle current field event. 
      *
      * @param p the player
      */
@@ -310,7 +311,7 @@ public class Level {
             	startDeal(p);
             	break;
             case Level.QUEST:
-            	startQuest(p); //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            	startQuest(p); 
             	break;
             case Level.GOAL:
                 System.out
@@ -341,83 +342,116 @@ public class Level {
      * Start quest.
      */
     
-    public void startQuest(Player p) { //TODO
-    	Character h =  new Dealer();
+    public void startQuest(Player p) { 
+    	//Questgeber
+    	Character q =  new Dealer();
+    	//Questgeber wird befuellt
     	
     	boolean quit = false;
     	Scanner sc = new Scanner(System.in);
-    	while(quit == false) {
-
-	    	System.out.println("Ich bin der Questgeber. Waehle aus: ");
-	    	System.out.println("1 -> neue Quest erhalten");
-	    	System.out.println("2 -> Quest abschließen");
-	    	System.out.println("3 -> Questgeber verlassen");
-	    	
-	    	String aktion = sc.nextLine();
-	    	switch(aktion) {	    	
-	    	case "1":
-	    		//pruefe ob aktuelle Quest des Spielers geloest wurde
-	    		
-	    		//nimm nächstes Quest aus dem Stapel
-    			Inventar<Quest> questlog = q.getQuestlog();
-    			Quest newQuest = questlog.firstItem();	
-    			
-    			//suche nach dem prequest davon im PLAYER...usw
-    			String prequestName = newQuest.getPrequest();
-    			Inventar<Quest> prequestRest = questlog.find(prequestName);
-    			Quest prequest = prequestRest.firstItem();
-    			
-	    		if(prequest.isQuestDone()){
+    	
+    	//falls Player schon ein Quest besitzt, sonst fuege ERSTES Quest (OHNE prequest) hinzu
+    	Inventar<Quest> test = p.getQuestlog();
+    	if(!test.isEmpty()) {
+	    	while(quit == false) {
+	
+		    	System.out.println("Ich bin der Questgeber. Waehle aus: ");
+		    	System.out.println("1 -> neue Quest erhalten");
+		    	System.out.println("2 -> Quest abschließen");
+		    	System.out.println("3 -> Questgeber verlassen");
+		    	
+		    	String aktion = sc.nextLine();
+		    	
+		    	switch(aktion) {	    	
+		    	case "1":
+		    		//pruefe ob aktuelle Quest des Spielers geloest wurde
+		    		
+		    		//Questlog des Questgebers
+	    			Inventar<Quest> questlog = q.getQuestlog();
+	    			//nimm erstes Quest auf dem Questlog
+	    			Quest newQuest = questlog.firstItem();	
 	    			
-	    			//fuege dem Player naechstes Quest hinzu
+	    			//Prequest des neuen Quests
+	    			String prequestName = newQuest.getPrequest();
 	    			
-	    		
-	    		//whaele naechstes quest aus
-	    		
-	    		//uebertrage quest auf player
-	    		continue;
-	    		} else {
-	    			System.out.println("Die aktuelle Quest ist noch nicht abgeschlossen.");
-	    			continue;
-	    		}
-	    		
-	    	case "2":	    		    		
-	    		System.out.println("Welche Quest moechtest du abschliessen? Name der Quest: ");
-	    		String eingabe = sc.nextLine();
-	    		
-	    		//suche nach dem Quest mit dem eingegebenen Namen im Questlog des Spielers
-	    		Inventar<Quest> questlog = p.getQuestlog(); 
-    			Inventar<Quest> questlogRest = questlog.find(eingabe);
-    			Quest quest = questlogRest.firstItem();	
-    			
-    			//suche nach dem prequest
-    			String prequestName = quest.getPrequest();
-    			Inventar<Quest> prequestRest = questlog.find(prequestName);
-    			Quest prequest = prequestRest.firstItem();
-	    		
-	    		//pruefe ob Vorquest abgeschlossen wurde
-	    		if(prequest.isQuestDone()) {	
-	    			//pruefe ob der notwendige Questgegenstand  enstprechend oft vorhanden ist
-	    			int quantity = quest.getQuantity();
-	    			Inventar<Quest> inventar = p.getQuestlog();	    			
-	    			if(inventar.quantity(quest.getItemName()) == quantity){
-	    				//markiere Quest als abgeschlossen
-	    				quest.questDone();
-	    			} else {
-		    				System.out.println("Die Quest wurde nicht vollständig abgeschlossen.");
-			    			continue;
-    				}	
-	    		} else {
-	    			System.out.println("Die Prequest wurde nicht abgeschlossen.");
-	    			continue;
-	    		}
-	    		continue;
-	    	case "3":
-	    		quit = true;
-	    		break;
-	    	
-	    	}
-    	} 	
+	    			//suche nach dem prequest des neuen quests im Questlog des PLAYER
+	    			
+	    			//Questlog des Spielers
+	    			Inventar<Quest> questlogPlayer1 = p.getQuestlog();
+	    			//suche Prequest im Questlog des Spielers
+	    			Inventar<Quest> prequestRest = questlogPlayer1.find(prequestName);
+	    			//Prequest des Spielers
+	    			Quest prequest = prequestRest.firstItem();
+	    			
+		    		//puefe ob Prequest erledigt ist
+	    			if(prequest.isQuestDone()){
+		    			
+		    			//fuege dem Inventar des Players - sortiert - ein neues Quest hinzu //sortiert sinvoll ?
+		    			p.addQuest(newQuest);
+		    			
+		    			//loesche uebetragene neue quest vom questgeber
+		    			q.deleteQuest(newQuest);
+		    		continue;
+		    		} else {
+		    			System.out.println("Die aktuelle Quest ist noch nicht abgeschlossen.");
+		    			continue;
+		    		}
+		    		
+		    	case "2":	    		    		
+		    		System.out.println("Welche Quest moechtest du abschliessen? Name der Quest: ");
+		    		String eingabe = sc.nextLine();
+		    		
+		    		//suche nach dem Quest mit dem eingegebenen Namen im Questlog des Spielers
+		    		System.out.println("1");
+		    		Inventar<Quest> questlogPlayer = p.getQuestlog(); 
+		    		System.out.println("2");
+	    			Inventar<Quest> questlogPlayerRest = questlogPlayer.find(eingabe);
+	    			System.out.println("3");
+	    			Quest quest = questlogPlayerRest.firstItem();	
+	    			System.out.println("4");
+	    			
+	    			//suche nach dem prequest
+	    			String prequestPlayerName = quest.getPrequest();
+	    			Inventar<Quest> prequestPlayerRest = questlogPlayer.find(prequestPlayerName);
+	    			Quest prequestPlayer = prequestPlayerRest.firstItem();
+		    		
+		    		//pruefe ob Vorquest abgeschlossen wurde
+		    		if(prequestPlayer.isQuestDone()) {	
+		    			//pruefe ob der notwendige Questgegenstand  enstprechend oft vorhanden ist
+		    			int quantity = quest.getQuantity();
+		    			Inventar<Quest> inventar = p.getQuestlog();	    			
+		    			if(inventar.quantity(quest.getItemName()) == quantity){
+		    				//markiere Quest als abgeschlossen
+		    				quest.questDone();
+		    			} else {
+			    				System.out.println("Die Quest wurde nicht vollständig abgeschlossen.");
+				    			continue;
+	    				}	
+		    		} else {
+		    			System.out.println("Die Prequest wurde nicht abgeschlossen.");
+		    			continue;
+		    		}
+		    		continue;
+		    	case "3":
+		    		quit = true;
+		    		break;
+		    	
+		    	}
+	    	} 	
+    	} else {
+    		System.out.println("TEST");
+    		//Questlog des Questgebers
+			Inventar<Quest> questlog = q.getQuestlog();
+			//nimm erstes Quest auf dem Questlog
+			Quest newQuest = questlog.firstItem();	
+			
+			//fuege dem Inventar des Players - sortiert - ein neues Quest hinzu //sortiert sinvoll ?
+			p.addQuest(newQuest);
+			
+			//loesche uebetragene neue quest vom questgeber
+			q.deleteQuest(newQuest);
+    		
+    	}//end ifElse
     }
     /**
      * Start deal.

@@ -6,7 +6,7 @@
  * @version 13.05.2015
  */
 
-public class Item implements Comparable {
+public class Item implements Comparable<Item> {
 
     /*** Statusattribute ***/
 
@@ -107,8 +107,7 @@ public class Item implements Comparable {
      *         Objekt kleiner als o
      *
      */
-    public int compareTo(Object o) {
-        Item ding = (Item) o;
+    public int compareTo(Item ding) {
         if (name.compareTo(ding.name) == 0) {
             if (value == ding.value) {
                 if (weight == ding.weight) {
