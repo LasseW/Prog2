@@ -105,6 +105,7 @@ public class Item implements Comparable<Item> {
     public int compareTo(Item ding) {
         if (name.compareTo(ding.name) == 0) {
             if (value == ding.value) {
+                //Math.signum gibt das vorzeichen durch -1.0 / 0 / 1.0 zurück
                     return (int) Math.signum(weight - ding.weight);
             } else {
                 return (int) Math.signum(value - ding.value);
