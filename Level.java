@@ -84,7 +84,8 @@ public class Level {
         for (int y = 0; y < mapData.length; y++) {
             for (int x = 0; x < mapData[0].length; x++) {
                 if (mapData[y][x] == START) {
-                	mapData[y-1][x] = QUEST;
+                    mapData[y-1][x] = QUEST;
+                	mapData[y-2][x] = DEALER;
                     playerX = x;
                     playerY = y;
                     return true;
@@ -118,7 +119,7 @@ public class Level {
      * Can move.
      *
      * @param c the direction
-     * @return true, wenn die Richtung möglich ist
+     * @return true, wenn die Richtung mÃ¶glich ist
      */
     public boolean canMove(char c) {
         switch (c) {
@@ -177,7 +178,7 @@ public class Level {
     /**
      * Can move up.
      *
-     * @return true, wenn mögliche Bewegung
+     * @return true, wenn mÃ¶gliche Bewegung
      */
     public boolean canMoveUp() {
         return isWalkablePosition(playerX, playerY - 1);
@@ -186,7 +187,7 @@ public class Level {
     /**
      * Can move down.
      *
-     * @return true, wenn mögliche Bewegung
+     * @return true, wenn mÃ¶gliche Bewegung
      */
     public boolean canMoveDown() {
         return isWalkablePosition(playerX, playerY + 1);
@@ -195,7 +196,7 @@ public class Level {
     /**
      * Can move left.
      *
-     * @return true, wenn mögliche Bewegung
+     * @return true, wenn mÃ¶gliche Bewegung
      */
     public boolean canMoveLeft() {
         return isWalkablePosition(playerX - 1, playerY);
@@ -204,7 +205,7 @@ public class Level {
     /**
      * Can move right.
      *
-     * @return true, wenn mögliche Bewegung
+     * @return true, wenn mÃ¶gliche Bewegung
      */
     public boolean canMoveRight() {
         return isWalkablePosition(playerX + 1, playerY);
@@ -266,7 +267,7 @@ public class Level {
         System.out.println("i -> Inventar anzeigen");
         System.out.println("l -> Questlog anzeigen");
         System.out.println("------------------------------");
-        System.out.print("Richtung oder Inventar? ");
+        System.out.print("Richtung, Inventar oder Questlog? ");
         
     }
 
@@ -294,7 +295,7 @@ public class Level {
      *
      * @param p the player
      */
-    public void handleCurrentFieldEvent (Player p) throws IOException {
+    public void handleCurrentFieldEvent (Player p, Character q) throws IOException {
         char field = getField();
         switch (field) {
             case Level.SMITHY:
@@ -314,7 +315,7 @@ public class Level {
             	startDeal(p);
             	break;
             case Level.QUEST:
-            	startQuest(p); 
+            	startQuest(p, q);
             	break;
             case Level.GOAL:
                 System.out
@@ -346,12 +347,10 @@ public class Level {
      * @
      */
     
-    public void startQuest(Player p) throws IOException { 
+    public void startQuest(Player p, Character q) throws IOException {
     	//Questgeber
-    	Character q =  new Dealer();
+
     	Inventar<Quest> quest = q.getQuestlog();
-    	quest.readFile("src/quest.csv", q);
-    	//Questgeber wird befuellt
     	
     	boolean quit = false;
     	Scanner sc = new Scanner(System.in);
@@ -359,11 +358,11 @@ public class Level {
     	//falls Player schon ein Quest besitzt, sonst fuege ERSTES Quest (OHNE prequest) hinzu
     	Inventar<Quest> test = p.getQuestlog();
     	if(!test.isEmpty()) {
-	    	while(quit == false) {
+	    	while(!quit) {
 	
 		    	System.out.println("Ich bin der Questgeber. Waehle aus: ");
 		    	System.out.println("1 -> neue Quest erhalten");
-		    	System.out.println("2 -> Quest abschlie�en");
+		    	System.out.println("2 -> Quest abschließen");
 		    	System.out.println("3 -> Questgeber verlassen");
 		    	
 		    	String aktion = sc.nextLine();
@@ -409,7 +408,7 @@ public class Level {
 		    		
 		    		//suche nach dem Quest mit dem eingegebenen Namen im Questlog des Spielers
 		    		System.out.println("1");
-		    		Inventar<Quest> questlogPlayer = p.getQuestlog(); 
+		    		Inventar<Quest> questlogPlayer = p.getQuestlog();
 		    		System.out.println("2");
 	    			Inventar<Quest> questlogPlayerRest = questlogPlayer.find(eingabe);
 	    			System.out.println("3");
@@ -425,12 +424,12 @@ public class Level {
 		    		if(prequestPlayer.isQuestDone()) {	
 		    			//pruefe ob der notwendige Questgegenstand  enstprechend oft vorhanden ist
 		    			int quantityNr = quest1.getQuantity();
-		    			Inventar<Item> inventar = p.getInventar();	  //???  			
+		    			Inventar<Item> inventar = p.getInventar();	  //???
 		    			if(inventar.quantity(quest1.getItemName()) >= quantityNr){
 		    				//markiere Quest als abgeschlossen
 		    				quest1.questDone();
 		    			} else {
-			    				System.out.println("Die Quest wurde nicht vollst�ndig abgeschlossen.");
+			    				System.out.println("Die Quest wurde nicht vollständig abgeschlossen.");
 				    			continue;
 	    				}	
 		    		} else {
@@ -445,15 +444,34 @@ public class Level {
 		    	}
 	    	} 	
     	} else {
-    		System.out.println("TEST");
+            /* TODO Queststart
+             * Beim Spielstart Quest anbieten -> komplette Liste, manuelle Auswahl
+             * -> überprüfen ob auswahl okay (prequest abgeschlossen?)
+             *
+             * ZITAT AUFGABENBLATT:
+             * der Questgeber speichert seine gesamten verfügbaren Quests
+             * in einer Liste und zeigt dem Spieler nur bereits
+             * freigeschaltete und noch nicht erfüllte Aufgaben.
+             */
+
+            /* TODO Questsystem
+             * Spieler hat bei sich nur aktuelle Quest und bereitsabgeschlossene gespeichert.
+             * Questlog ausgeben
+             */
     		//Questlog des Questgebers
-			//Inventar<Quest> questlog = q.getQuestlog();
 			System.out.println(quest);
-			//nimm erstes Quest auf dem Questlog
-			Quest newQuest = quest.firstItem();	
+			//nimm erstes Quest auf dem Questlog, dass keinen Prequest hat
+
+			Quest newQuest = quest.firstItem();
+            while (!newQuest.getPrequest().equals("")) {
+                quest = quest.next;
+                newQuest = quest.firstItem();
+            }
+
+            System.out.println("Neuer Quest erhalten:");
 			System.out.println(newQuest);
 			
-			//fuege dem Inventar des Players - sortiert - ein neues Quest hinzu //sortiert sinvoll ?
+			//fuege dem Inventar des Players ein neues Quest hinzu
 			p.addQuest(newQuest);
 			
 			//loesche uebetragene neue quest vom questgeber
@@ -464,19 +482,23 @@ public class Level {
     /**
      * Start deal.
      * 
-     * @param the player
+     * @param p player
      */
     
     public void startDeal(Player p) throws IOException {
-    	//TODO
+    	/* TODO zufall einbauen
+    	 * der Händler startet mit einer zufälligen Auswahl an items
+    	 */
     	Character h = new Dealer();
     	Inventar<Item> inventar = h.getInventar();
     	inventar.readFile("src/item.csv", h);
     	
     	boolean quit = false;
     	Scanner sc = new Scanner(System.in);
-    	
-    	while(quit == false) {
+
+        System.out.println(inventar);
+        //Inventar<Item>
+    	while(!quit) {
     		
     		System.out.println( "Moechtest du Items kaufen oder verkaufen. Waehle aus: ");
         	System.out.println("1 -> kaufen");
@@ -490,8 +512,9 @@ public class Level {
         		//show dealers inventar
         		Inventar inventarH = new Inventar();
         		inventarH = h.getInventar();
+
         		System.out.print(inventarH);
-        		
+
         		//ask again
         		System.out.println("Willst du ein Inventar kaufen?");
         		System.out.println("1 -> ja");
@@ -551,8 +574,7 @@ public class Level {
         		break;
         	default:
                 System.out.println("Fehlerhafte Aktion!");
-                continue;
-        	}
+            }
     		
     	}
 		
@@ -566,8 +588,7 @@ public class Level {
         Character m = randomMonster();
         Inventar<Item> inventar = m.getInventar();
     	inventar.readFile("src/item.csv", m);
-    	
-       
+
         Scanner sc = new Scanner(System.in);
 
         System.out.println("                 Kampf Start                    ");
@@ -585,7 +606,7 @@ public class Level {
                     "3 -> Harter Schlag (%d AP, %d%% Selbstschaden)%n",
                     Player.HARD_HIT_COST, Player.HARD_HIT_SELF_DAMAGE_PERCENT);
             System.out.printf("4 -> Feuerball (%d AP)%n", Player.FIREBALL_COST);
-            System.out.printf("5 -> ATK auswürfeln (%d AP)%n",
+            System.out.printf("5 -> ATK auswÃ¼rfeln (%d AP)%n",
                     Player.REROLL_COST);
             System.out.println("Welche Aktion?: ");
             System.out
@@ -607,39 +628,39 @@ public class Level {
                     if (p.heal()) {
                         System.out.println("Spieler heilt sich!");
                     } else {
-                        System.out.println("Nicht genügend Heiltränke!");
+                        System.out.println("Nicht genÃ¼gend HeiltrÃ¤nke!");
                     }
                     break;
                 case "3":
                     playerDamage = p.hardHit(m);
                     if (playerDamage != -1) {
-                        System.out.println("Spieler schlägt hart zu!");
+                        System.out.println("Spieler schlÃ¤gt hart zu!");
                         System.out.printf("Spieler verursacht %d Schaden!%n",
                                 playerDamage);
                         System.out
                                 .printf("Spieler verursacht %d Selbstschaden!%n",
                                         (int) (Player.HARD_HIT_SELF_DAMAGE_PERCENT / 100.0 * playerDamage));
                     } else {
-                        System.out.println("Nicht genügend AP!");
+                        System.out.println("Nicht genÃ¼gend AP!");
                     }
                     break;
                 case "4":
                     playerDamage = p.fireball(m);
                     if (playerDamage != -1) {
-                        System.out.println("Spieler schießt einen Feuerball!");
+                        System.out.println("Spieler schieÃŸt einen Feuerball!");
                         System.out.printf("Spieler verursacht %d Schaden!%n",
                                 playerDamage);
                     } else {
-                        System.out.println("Nicht genügend AP!");
+                        System.out.println("Nicht genÃ¼gend AP!");
                     }
                     break;
                 case "5":
                     if (p.reroll()) {
-                        System.out.println("ATK neu ausgewürfelt!");
+                        System.out.println("ATK neu ausgewÃ¼rfelt!");
                         System.out.print("Neue Statuswerte: ");
                         System.out.print(p);
                     } else {
-                        System.out.println("Nicht genügend AP!");
+                        System.out.println("Nicht genÃ¼gend AP!");
                     }
                     break;
                 default:
