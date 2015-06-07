@@ -74,15 +74,7 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
      * @return true, x ist in der Liste enthalten
      */
     public boolean isInList(T x) {
-        if (isEmpty()) {
-            return false;
-        } else {
-            if ((next.item).equals(x)) {
-                return true;
-            } else {
-                return next.isInList(x);
-            }
-        }
+        return !isEmpty() && ((next.item).equals(x) || next.isInList(x));
     }
 
     /**
@@ -128,7 +120,7 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
         if (!this.isEmpty()) {
             /* solange x groesser ist als das aktuelle Item */
             /* achte darauf dass nicht null */
-            if ((next.item).compareTo(x) < 0) { 
+            if ((next.item).compareTo(x) < 0) {
                 /* rekursiver Aufruf */
                 return this.next.insert(x);
 
@@ -153,10 +145,11 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
      * @return die geanderte Liste
      */
     public Inventar<T> append(T x) {
-        if (isEmpty())
+        if (isEmpty()) {
             return insert(x);
-        else
+        } else {
             return next.append(x);
+        }
     }
 
     /**
@@ -223,7 +216,7 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
     /**
      * reads the file and fills the inventar with this content //TODOOO!!!
      * 
-     * @param file
+     * @param file Dateinamen
      * @throws IOException
      */
     public void readFile(String file, Character c) throws IOException { //IOException ??
@@ -237,11 +230,11 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
         {
         	String[] t = zeile.split(", ");
         	if(t.length == 3) {
-        		Item ding = new Item(t[0], Integer.parseInt(t[1]), Integer.parseInt(t[2]));  
+        		Item ding = new Item(t[0], Double.parseDouble(t[1]), Double.parseDouble(t[2]));
         		//this.append((T) ding); //
         		c.addItem(ding);     	
         	} else if (t.length == 4) {
-        		Quest quest = new Quest(t[0], t[1], t[2], Integer.parseInt(t[3]), false);  
+        		Quest quest = new Quest(t[0], t[1], t[2], Integer.parseInt(t[3]), false);
         		//this.append( (T) quest); // <--?
         		c.addQuest(quest);
         	} else {
