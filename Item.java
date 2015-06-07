@@ -6,7 +6,7 @@
  * @version 13.05.2015
  */
 //TODO
-public class Item<V extends Number> implements Comparable<Item> {
+public class Item implements Comparable<Item> {
 
     /*** Statusattribute ***/
 
@@ -17,11 +17,11 @@ public class Item<V extends Number> implements Comparable<Item> {
     /**
      * The weight
      */
-    private V weight;
+    private double weight;
     /**
      * The value
      */
-    private V value;
+    private double value;
 
     /*** Konstruktoren ***/
 
@@ -32,7 +32,7 @@ public class Item<V extends Number> implements Comparable<Item> {
      * @param value Verkaufswert
      * @param weight Gewicht
      */
-    public Item(String name, V value, V weight) {
+    public Item(String name, double value, double weight) {
         this.name = name;     
         this.value = value;
         this.weight = weight;
@@ -81,12 +81,13 @@ public class Item<V extends Number> implements Comparable<Item> {
      * @return boolean true oder false
      */
     public boolean equals(Item ding) {
-        if (ding.name.equals(name) && ding.value == value
-                && ding.weight == weight) {
-            return true;
-        } else {
-            return false;
-        }
+        return (ding.name.equals(name) && ding.value == value && ding.weight == weight);
+//        if (ding.name.equals(name) && ding.value == value
+//                && ding.weight == weight) {
+//            return true;
+//        } else {
+//            return false;
+//        }
     }
 
     /**
@@ -110,16 +111,16 @@ public class Item<V extends Number> implements Comparable<Item> {
     public int compareTo(Item ding) {
         if (name.compareTo(ding.name) == 0) {
             if (value == ding.value) {
-                if (weight == ding.weight) {
-                    return 0;
-                } else {
-                    return (weight - ding.weight);
-                }// weight
+                //Rueckgabe von 0 erlaubt -> Gleichheit
+                //if (weight == ding.weight) {
+                //    return 0;
+                //} else {
+                    return (int) Math.signum(weight - ding.weight);
+                //}// weight
             } else {
-                return (value - ding.value);
+                return (int) Math.signum(value - ding.value);
             }// value
         }// name
-
         return name.compareTo(ding.name);
     }
 
