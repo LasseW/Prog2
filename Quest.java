@@ -5,7 +5,7 @@ import java.io.*;
  */
 
 /**
- * @author H�lya
+ * @author Hülya
  *
  */
 
@@ -46,7 +46,11 @@ public class Quest implements Comparable<Quest> {
 		this.quantity = quantity;
 		this.done = done;
 	}
-	
+
+	public Quest(String name, String prequest, String item, int quantity) {
+		this(name, prequest, item, quantity, false);
+	}
+
 	/* get quantity*/
 	public int getQuantity(){
 		return this.quantity;
@@ -65,11 +69,7 @@ public class Quest implements Comparable<Quest> {
 	
 	/* proofs done or not*/
 	public boolean isQuestDone(){
-		if(this.done == true)
-			return true;
-		else{
-			return false;
-		}
+		return this.done;
 	}
 	
 	/* switch done */
@@ -85,21 +85,17 @@ public class Quest implements Comparable<Quest> {
     /**
      * Pueft den Namen der Quest auf Gleichheit
      *
-     * @param item das Item
+     * @param quest das Item
      * @return boolean true oder false
      */
 	public boolean equals(String quest) {
-	    if (this.name.equals(quest)) {
-	        return true;
-	    } else {
-	        return false;
-	    }
+	    return this.name.equals(quest);
 	}
 	
 	/**
      * CompareTo.
      *
-     * @return int 0 falls Objekte gleich 1 falls Objekt goeßer als o -1 falls
+     * @return int 0 falls Objekte gleich 1 falls Objekt goeÃŸer als o -1 falls
      *         Objekt kleiner als o
      *
      */
