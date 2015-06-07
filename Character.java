@@ -236,19 +236,23 @@ public class Character {
     /**
      *  Add Quest to the character
      *  
-     * @param quest
+     * @param quest Quest
      */
     public void addQuest(Quest quest) {
-    	this.questlog = this.questlog.append(quest);
+    	questlog.append(quest);
     }
     
     /**
      *  Add Quest to the character
      *  
-     * @param quest
+     * @param item quest
+     *
+     * Problem: addItem muss von vorne Anfangen, nicht bei dem letzten einefügten Item
      */
     public void addItem(Item item) {
-    	this.inventar = this.inventar.append(item);
+        //so funktioniert die Sortierung nicht, da man in der Liste immer weiter nach hinten geht
+        //inventar = inventar.insert(item);
+        inventar.insert(item);
     }
     
     /**
@@ -314,7 +318,7 @@ public class Character {
 	 */
     public boolean buyInventar(Character character, String itemName , int itemValue, int itemWeight) {
     	
-    	if( this.looseGold(itemValue) == true ) {
+    	if(this.looseGold(itemValue)) {
 			Item item = new Item(itemName, itemValue, itemWeight);
 			
 			/*find choosen item*/
