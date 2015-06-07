@@ -84,8 +84,8 @@ public class Level {
         for (int y = 0; y < mapData.length; y++) {
             for (int x = 0; x < mapData[0].length; x++) {
                 if (mapData[y][x] == START) {
-                    mapData[y-1][x] = QUEST;
-                	mapData[y-2][x] = DEALER;
+                    mapData[y-1][x] = DEALER;
+                	//mapData[y-2][x] = GOAL;
                     playerX = x;
                     playerY = y;
                     return true;
@@ -187,7 +187,7 @@ public class Level {
     /**
      * Can move down.
      *
-     * @return true, wenn mÃ¶gliche Bewegung
+     * @return true, wenn moegliche Bewegung
      */
     public boolean canMoveDown() {
         return isWalkablePosition(playerX, playerY + 1);
@@ -196,7 +196,7 @@ public class Level {
     /**
      * Can move left.
      *
-     * @return true, wenn mÃ¶gliche Bewegung
+     * @return true, wenn moegliche Bewegung
      */
     public boolean canMoveLeft() {
         return isWalkablePosition(playerX - 1, playerY);
@@ -205,7 +205,7 @@ public class Level {
     /**
      * Can move right.
      *
-     * @return true, wenn mÃ¶gliche Bewegung
+     * @return true, wenn moegliche Bewegung
      */
     public boolean canMoveRight() {
         return isWalkablePosition(playerX + 1, playerY);
@@ -285,7 +285,7 @@ public class Level {
      */
     private void clearField() {
         char field = getField();
-        if (field == SMITHY || field == FOUNTAIN || field == BATTLE) {
+        if (field == SMITHY ) {
             mapData[playerY][playerX] = PLAIN;
         }
     }
@@ -318,9 +318,12 @@ public class Level {
             	startQuest(p, q);
             	break;
             case Level.GOAL:
-                System.out
-                        .println("Herzlichen Glueckwunsch! Sie haben gewonnen!");
-                System.exit(0);
+            	if (p.allQuestDone() && q.isEmpty()) {
+            		System.out.println("Herzlichen Glueckwunsch! Sie haben gewonnen!");
+            		System.exit(0);
+            	} else {
+            		System.out.println("Sie haben noch nicht alle Quest des Questgebers abgeschlossen!");
+            	}
                 break;
         }
         clearField();
@@ -580,11 +583,11 @@ public class Level {
     	    		//choose inventar to sell
     	    		System.out.println("Welches Inventar willst du kaufen ?");
     	    		System.out.println("Name:");
-    	    		String name = sc.next();
+    	    		String name = sc.nextLine();
     	    		System.out.println("Wert");
-    	    		int value = sc.nextInt();
+    	    		double value = sc.nextDouble();
     	    		System.out.println("Gewicht");
-    	    		int weight = sc.nextInt();
+    	    		double weight = sc.nextDouble();
     	    		
     	    		//buy inventar
     	    		if(p.buyInventar(h, name, value, weight)) {
@@ -611,9 +614,9 @@ public class Level {
         		System.out.println("Name:");
         		String name = sc.next();
         		System.out.println("Wert");
-        		int value = sc.nextInt();
+        		double value = sc.nextDouble();
         		System.out.println("Gewicht");
-        		int weight = sc.nextInt();
+        		double weight = sc.nextDouble();
         			
         		//sell inventar
         		if(p.sellInventar(h, name, value, weight)) {

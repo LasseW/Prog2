@@ -6,7 +6,7 @@ public class Character {
     /**
      * The Gold
      */
-    private int gold;
+    private double gold;
     /*
      * The Inventar
      */
@@ -82,7 +82,7 @@ public class Character {
      *
      * @return gold
      */
-    public int getGold() {
+    public double getGold() {
         return gold;
     }
 
@@ -264,7 +264,7 @@ public class Character {
     /**
      * loose gold
      */
-    public boolean looseGold(int lost) {
+    public boolean looseGold(double lost) {
     	if(!(this.gold < lost)) {
     	 this.gold = this.gold - lost;
     	 return true;
@@ -277,13 +277,13 @@ public class Character {
     /**
      * win gold
      */
-    public void winGold(int win) {
+    public void winGold(double win) {
     	this.gold = this.gold + win;
     }
     /**
 	 * Sell one Inventar to a character
 	 */
-    public boolean sellInventar(Character character, String itemName , int itemValue, int itemWeight) {
+    public boolean sellInventar(Character character, String itemName , double itemValue, double itemWeight) {
     	
 			Item item = new Item(itemName, itemValue, itemWeight);
 
@@ -316,7 +316,7 @@ public class Character {
 	/**
 	 * Buy one Inventar from a character
 	 */
-    public boolean buyInventar(Character character, String itemName , int itemValue, int itemWeight) {
+    public boolean buyInventar(Character character, String itemName , double itemValue, double itemWeight) {
     	
     	if(this.looseGold(itemValue)) {
 			Item item = new Item(itemName, itemValue, itemWeight);
@@ -342,4 +342,35 @@ public class Character {
     		return false;
     	}
     }
+    
+    /**
+     * Proofs if all quests are done
+     * 
+     * @return done
+     */
+    public boolean allQuestDone() {
+    	boolean done = true;
+    	/* Questlog des Characters*/
+    	Inventar<Quest> questlog = this.getQuestlog();
+    	/* pruefe ob alle Items erledigt sind */
+    	for(int i = 0; i < questlog.length(); i++) {
+    		if(!questlog.getItem(i).isQuestDone()){
+    			done = false;
+    			break;
+    		}
+    	}
+    	return done;   	
+    }
+    
+    /**
+     * Proofs if the questcharacter is empty
+     * 
+     * @return isEmpty
+     */
+    public boolean isEmpty(){
+    	/* Questlog des Characters*/
+    	Inventar<Quest> questlog = this.getQuestlog();
+    	return questlog.isEmpty();   	
+    }
+    
 }

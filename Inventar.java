@@ -6,7 +6,7 @@ import java.io.IOException;
  * Diese Klasse stellt ein Inventar fuer den Spieler zur Verfuegung
  * 
  * 
- * @author Hülya Poyraz 4057202 Gruppe 11
+ * @author Huelya Poyraz 4057202 Gruppe 11
  * @version 13.05.2015
  */
 
@@ -24,12 +24,10 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
         next = null;
     }
     
-    //TODO!!!!
-    /*public Inventar<T> delete(T x)*/
 	public int quantity(String name) {
 		int nr = 0;
+		/* aktuelles, neues Inventar ohne Quest x */
 		while(this.delete(name) != null){
-			/* aktuelles, neues Inventar ohne Quest x */
 			++nr;
 		}
 		return nr;  		
@@ -56,7 +54,7 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
     }
 
     /**
-     * Gibt die Laenge der Liste zurück
+     * Gibt die Laenge der Liste zurueck
      *
      * @return die Laenge
      */
@@ -97,7 +95,6 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
      * @return das i-te Item
      * @throws IndexOutOfBoundsException wenn i < 0 oder i >= length()
      */
-
     public T getItem(int i) throws IndexOutOfBoundsException {
         if (i < 0 || i >= next.length())
             throw new IndexOutOfBoundsException();
@@ -167,7 +164,13 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
             return next.find(x);
     }
 
-    // nicht schön, aber funtioniert
+	/**
+	 * Hilfsmethode
+	 * 
+	 * @param name
+	 * @return T
+	 */
+    // nicht schoen, aber funtioniert
     public T find(String name) {
         Inventar<T> merk = this;
         //Inventar<T> merk = this;
@@ -183,7 +186,7 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
         return null;
     }
 
-    // nicht schön, aber funtioniert
+    // nicht schoen, aber funtioniert
     public T find2(String name) {
         Inventar<T> merk = this;
         while (!merk.isEmpty()) {
@@ -232,12 +235,8 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
         int j = 1;
         
         while (!merk.isEmpty()) {        	
-        	/* leeres Item nicht wird nicht angezeigt */
-    		//if(merk.item != null) {
-    			//System.out.println("DOOD");
 	            result += "(" + j + ")" + merk.next.item + "\n";   
 	            j++;
-    		//}
     		merk = merk.next;
     		
         }
@@ -273,7 +272,6 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
         	
         }
         br.close();
-        //return quests;
           	
     }
 
