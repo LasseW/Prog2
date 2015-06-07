@@ -358,6 +358,7 @@ public class Level {
     	//falls Player schon ein Quest besitzt, sonst fuege ERSTES Quest (OHNE prequest) hinzu
     	Inventar<Quest> test = p.getQuestlog();
     	if(!test.isEmpty()) {
+            loop:
 	    	while(!quit) {
 	
 		    	System.out.println("Ich bin der Questgeber. Waehle aus: ");
@@ -367,42 +368,80 @@ public class Level {
 		    	
 		    	String aktion = sc.nextLine();
 		    	
-		    	switch(aktion) {	    	
+		    	switch(aktion) {
 		    	case "1":
 		    		//pruefe ob aktuelle Quest des Spielers geloest wurde
-		    		
+
+                    //Questlog des Spielers
+                    Inventar<Quest> questlogPlayer1 = p.getQuestlog();
+
+                    //Zeile zum Testen des Questsystems -> setzt einen Quest auf erledigt.
+                    //questlogPlayer1.firstItem().questDone();
+
+                    Quest merk;
+                    boolean allDone = false;
+                    while (!allDone) {
+                        //questlogPlayer1 = questlogPlayer1.next;
+                        while(!questlogPlayer1.isEmpty()) {
+                            merk = questlogPlayer1.firstItem();
+                            if (!(merk.isQuestDone())) {
+                                System.out.println("Bisheriger Quest nicht abgeschlossen.");
+                                continue loop;
+                            }
+                            questlogPlayer1 = questlogPlayer1.next;
+                        }
+                        allDone = true;
+                    }
+
+                    System.out.println("Folgende Quests koennen ausgewaehlt werden:");
+                    System.out.println(possibleQuest(p, q));
+                    Quest newQuest = null;
+                    quest = q.getQuestlog();
+                    while (newQuest == null) {
+                        System.out.println("Waehle einen Quest ueber die eingabe des Questnamens:");
+                        String wahl = sc.nextLine();
+                        //newQuest = quest.firstItem()
+                        newQuest = quest.find(wahl);
+                    }
+                    System.out.println("Neuer Quest erhalten:");
+                    System.out.println(newQuest);
+
+                    //fuege dem Inventar des Players ein neues Quest hinzu
+                    p.addQuest(newQuest);
+
+                    //loesche uebetragene neue quest vom questgeber
+                    q.deleteQuest(newQuest);
+                    /*
 		    		//Questlog des Questgebers
 	    			Inventar<Quest> questlog = q.getQuestlog();
 	    			//nimm erstes Quest auf dem Questlog
-	    			Quest newQuest = questlog.firstItem();	
-	    			
+	    			Quest newQuest = questlog.firstItem();
+
 	    			//Prequest des neuen Quests
 	    			String prequestName = newQuest.getPrequest();
-	    			
-	    			//suche nach dem prequest des neuen quests im Questlog des PLAYER
-	    			
-	    			//Questlog des Spielers
-	    			Inventar<Quest> questlogPlayer1 = p.getQuestlog();
+
 	    			//suche Prequest im Questlog des Spielers
-	    			Inventar<Quest> prequestRest = questlogPlayer1.find(prequestName);
+	    			//Inventar<Quest> prequestRest = questlogPlayer1.find(prequestName);
 	    			//Prequest des Spielers
-	    			Quest prequest = prequestRest.firstItem();
-	    			
+	    			//Quest prequest = prequestRest.firstItem();
+                    Quest prequest = questlogPlayer1.find(prequestName);
+
 		    		//puefe ob Prequest erledigt ist
-	    			if(prequest.isQuestDone()){
+	    			if(prequest == null || prequest.isQuestDone()){
 		    			
-		    			//fuege dem Inventar des Players - sortiert - ein neues Quest hinzu //sortiert sinvoll ?
+		    			//fuege dem Inventar des Players ein neues Quest hinzu
 		    			p.addQuest(newQuest);
 		    			
 		    			//loesche uebetragene neue quest vom questgeber
 		    			q.deleteQuest(newQuest);
+
 		    		continue;
 		    		} else {
 		    			System.out.println("Die aktuelle Quest ist noch nicht abgeschlossen.");
 		    			continue;
 		    		}
-		    		
-		    	case "2":	    		    		
+		    		*/continue ;
+		    	case "2":/*
 		    		System.out.println("Welche Quest moechtest du abschliessen? Name der Quest: ");
 		    		String eingabe = sc.nextLine();
 		    		
@@ -410,9 +449,9 @@ public class Level {
 		    		System.out.println("1");
 		    		Inventar<Quest> questlogPlayer = p.getQuestlog();
 		    		System.out.println("2");
-	    			Inventar<Quest> questlogPlayerRest = questlogPlayer.find(eingabe);
+	    			Quest closeQuest = questlogPlayer.find(eingabe);
 	    			System.out.println("3");
-	    			Quest quest1 = questlogPlayerRest.firstItem();	
+	    			//Quest quest1 = questlogPlayerRest.firstItem();
 	    			System.out.println("4");
 	    			
 	    			//suche nach dem prequest
@@ -435,7 +474,7 @@ public class Level {
 		    		} else {
 		    			System.out.println("Die Prequest wurde nicht abgeschlossen.");
 		    			continue;
-		    		}
+		    		}*/
 		    		continue;
 		    	case "3":
 		    		quit = true;
@@ -444,6 +483,30 @@ public class Level {
 		    	}
 	    	} 	
     	} else {
+            System.out.println("Ich bin der Questgeber, moegliche Quests:");
+            //Questlog des Questgebers
+
+            /*Quest newQuest = quest.firstItem();
+            int i = 0;
+            while (!quest.isEmpty()) {
+                newQuest = quest.firstItem();
+                if(newQuest.getPrequest().equals("")) {
+                    ++i;
+                    System.out.println("(" + i +")" + newQuest);
+                }
+                quest = quest.next;
+            }*/
+
+            System.out.println(possibleQuest(p, q));
+
+            Quest newQuest = null;
+            quest = q.getQuestlog();
+            while (newQuest == null) {
+                System.out.println("Waehle einen Quest ueber die eingabe des Questnamens:");
+                String wahl = sc.nextLine();
+                //newQuest = quest.firstItem()
+                newQuest = quest.find(wahl);
+            }
             /* TODO Queststart
              * Beim Spielstart Quest anbieten -> komplette Liste, manuelle Auswahl
              * -> überprüfen ob auswahl okay (prequest abgeschlossen?)
@@ -458,15 +521,6 @@ public class Level {
              * Spieler hat bei sich nur aktuelle Quest und bereitsabgeschlossene gespeichert.
              * Questlog ausgeben
              */
-    		//Questlog des Questgebers
-			System.out.println(quest);
-			//nimm erstes Quest auf dem Questlog, dass keinen Prequest hat
-
-			Quest newQuest = quest.firstItem();
-            while (!newQuest.getPrequest().equals("")) {
-                quest = quest.next;
-                newQuest = quest.firstItem();
-            }
 
             System.out.println("Neuer Quest erhalten:");
 			System.out.println(newQuest);
@@ -701,6 +755,46 @@ public class Level {
 
             System.out.print(p);
             System.out.print(m);
+        }
+    }
+
+    public String possibleQuest(Player p, Character q) {
+        //Inventar<Quest> log;
+        String log ="";
+        Inventar<Quest> qLog = q.getQuestlog();
+        Inventar<Quest> pLog = p.getQuestlog();
+
+        //Fall 1: Player hat noch keinen Quest in seinem Log
+        if (pLog.isEmpty()) {
+            Quest newQuest;
+            int i = 0;
+            while (!qLog.isEmpty()) {
+                newQuest = qLog.firstItem();
+                if(newQuest.getPrequest().equals("")) {
+                    log += "(" + (++i) +")" + newQuest.toString() + "\n";
+                }
+                qLog = qLog.next;
+            }
+            return log;
+
+        // Fall 2: Questgeber hat keinen Quest mehr in seinem Log -> Alle Quests beim Spieler
+        } else if (qLog.isEmpty()){
+            return null;
+
+        // Fall 3: mind 1 Quest abgeschlossen, Questgeber besitzt noch Quests
+        } else {
+            Quest newQuest;
+            int i = 0;
+            while (!qLog.isEmpty()) {
+                newQuest = qLog.firstItem();
+                if(newQuest.getPrequest().equals("")) {
+                    log += "(" + (++i) +")" + newQuest.toString() + "\n";
+                } else if (pLog.find(newQuest.getPrequest()) != null) {
+                    log += "(" + (++i) +")" + newQuest.toString() + "\n";
+                }
+                qLog = qLog.next;
+            }
+            return log;
         }
     }
 
