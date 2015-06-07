@@ -169,13 +169,26 @@ public class Inventar<T extends Comparable<T>> implements List<T> {
 
     // nicht schön, aber funtioniert
     public T find(String name) {
-        Inventar<T> merk = this.next;
+        Inventar<T> merk = this;
+        //Inventar<T> merk = this;
         while (!merk.isEmpty()) {
-            System.out.println(merk.item);
+            merk = merk.next;
             Quest test = new Quest();
             test = (Quest) merk.item;
-            System.out.println(test);
-            System.out.println(test.getName().equals(name));
+            if (test.getName().equals(name)) {
+                return merk.item;
+            }
+            //merk = merk.next;
+        }
+        return null;
+    }
+
+    // nicht schön, aber funtioniert
+    public T find2(String name) {
+        Inventar<T> merk = this;
+        while (!merk.isEmpty()) {
+            Quest test = new Quest();
+            test = (Quest) merk.item;
             if (test.getName().equals(name)) {
                 return merk.item;
             }
