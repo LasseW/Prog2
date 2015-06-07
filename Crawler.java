@@ -17,6 +17,12 @@ public class Crawler {
         Level m = new Level(mg.generate(13, 13));
         Scanner sc = new Scanner(System.in);
         Player p = new Player();
+
+        //Questgeber initialisieren
+        Character q =  new Dealer();
+        Inventar<Quest> quest = q.getQuestlog();
+        quest.readFile("src/quest.csv", q);
+
         while (!p.isDefeated()) {
             System.out.println(m);
             m.showPrompt();
@@ -41,7 +47,7 @@ public class Crawler {
                     System.out.println("Ungültige Richtung");
                 } else {
                     m.move(direction);
-                    m.handleCurrentFieldEvent(p);
+                    m.handleCurrentFieldEvent(p, q);
                 }
             }
         }
